@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -134,4 +135,26 @@ public class UserController {
         return  list;
 //       return userJpaRepository.findByFirstName(idName);
     }
+
+    /**
+     * 使用Sort排序
+     * @param name
+     * @return
+     */
+    @RequestMapping("findByAndSort")
+    public List<User> findByAndSort(String name){
+        return (List<User>) userJpaRepository.findByAndSort(name, new Sort(new Sort.Order( Sort.Direction.DESC,"id")));
+    }
+
+    /**
+     * 使用jpaSort排序
+     * @param name
+     * @return
+     */
+    @RequestMapping("findByAndJpaSort")
+    public List<User> findByAndJpaSort(String name){
+        return (List<User>) userJpaRepository.findByAndSort(name, JpaSort.unsafe(JpaSort.Direction.DESC,"id"));
+    }
+
+
 }

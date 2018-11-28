@@ -1,9 +1,9 @@
 package com.hvly.springjp_1.com.hlvy.repository;
 
 import com.hvly.springjp_1.com.hlvy.entity.User;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
@@ -47,4 +47,13 @@ public interface UserJpaRepository extends JpaRepository<User,Long> {
      */
     @Query(value = "select * from User order by ?1 desc ",nativeQuery = true)
     List<User> findByFirstName(String idName);
+
+    /**
+     * 使用Sort进行排序
+     * @param name
+     * @param sort
+     * @return
+     */
+    @Query("select u from User u where name like %?1%")
+    List<User> findByAndSort(String name, Sort sort);
 }
