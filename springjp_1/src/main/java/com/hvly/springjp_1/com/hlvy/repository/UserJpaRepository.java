@@ -1,9 +1,13 @@
 package com.hvly.springjp_1.com.hlvy.repository;
 
 import com.hvly.springjp_1.com.hlvy.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,7 +16,7 @@ import java.util.List;
  *
  * @author heng
  **/
-public interface UserJpaRepository extends JpaRepository<User,Long> {
+public interface UserJpaRepository extends JpaRepository<User,Long> , JpaSpecificationExecutor<User> {
     /**
      * 使用jpql查询
      * nativeQuery默认false 注释:是否启用原生sql
@@ -56,4 +60,31 @@ public interface UserJpaRepository extends JpaRepository<User,Long> {
      */
     @Query("select u from User u where name like %?1%")
     List<User> findByAndSort(String name, Sort sort);
+
+    /**
+     * 使用@Query分页
+     * @param pageable
+     * @return
+     */
+    @Query("select u from User u")
+    Page<User> findByAllPage(Pageable pageable);
+
+    /**
+     * 使用原生sql进行分页
+     * 1.59版本需要这样写    select * from User /* #pageable# */
+    /**
+     * @param pageable
+     * @return
+     */
+    @Query(value = "select * from User  ", countQuery = "select count(*) from User",nativeQuery = true)
+    Page<User> findBySqlAllPage(Pageable pageable);
+
+    /**
+     * 使用@Param查询
+     * @param id
+     * @param name
+     * @return
+     */
+    @Query("select u from User u where u.id = :id or u.name = :name")
+    List<User> findLastNameOrFirstName(@Param("id") Long id, @Param("name") String name);
 }

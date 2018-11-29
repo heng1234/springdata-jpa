@@ -156,5 +156,42 @@ public class UserController {
         return (List<User>) userJpaRepository.findByAndSort(name, JpaSort.unsafe(JpaSort.Direction.DESC,"id"));
     }
 
+    /**
+     * 使用@Query进行分页
+     * @return
+     */
+    @RequestMapping("findByAllPage")
+    public Page<User> findByAllPage(int page){
+        if(page<0){
+            page=0;
+        }
+        return  userJpaRepository.findByAllPage(new PageRequest(page,3));
+    }
+
+    /**
+     * 使用原生sql进行分页
+     * @param page
+     * @return
+     */
+    @RequestMapping("findBySqlAllPage")
+    public Page<User> findBySqlAllPage(int page){
+        if(page<0){
+            page=0  ;
+        }
+        return  userJpaRepository.findBySqlAllPage(new PageRequest(page,3, Sort.Direction.ASC,"id"));
+    }
+
+    /**
+     * 使用@Param进行查询
+     * @param id
+     * @param name
+     * @return
+     */
+    @RequestMapping("findLastNameOrFirstName")
+    public List<User> findLastNameOrFirstName(Long id,String name){
+
+        return  userJpaRepository.findLastNameOrFirstName(id,name);
+    }
+
 
 }
