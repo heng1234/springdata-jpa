@@ -87,4 +87,13 @@ public interface UserJpaRepository extends JpaRepository<User,Long> , JpaSpecifi
      */
     @Query("select u from User u where u.id = :id or u.name = :name")
     List<User> findLastNameOrFirstName(@Param("id") Long id, @Param("name") String name);
+
+    /**
+     * 使用Spel表达式查询  #{#entityName} 1、如果定义了@Entity注解直接使用属性名 2、如果没有定义直接使用实体类名
+     * @return
+     */
+    @Query("select u  from  #{#entityName} u")
+    List<User> findBySpelAll();
+
+
 }

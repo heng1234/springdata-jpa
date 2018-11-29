@@ -1,6 +1,7 @@
 package com.hvly.springjp_1.com.hlvy.entity;
 
 
+import com.hvly.springjp_1.com.hlvy.baseDao.AbstractMappedType;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -14,8 +15,8 @@ import javax.persistence.Id;
  * @author heng
  **/
 @Data//lombok里的
-@Entity(name = "User")
-public class User  {
+@Entity
+public class SeLPUser extends AbstractMappedType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//自动增递
@@ -23,7 +24,6 @@ public class User  {
 
     private String name;
 
-    private String email;
 
     public Long getId() {
         return id;
@@ -41,11 +41,4 @@ public class User  {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

@@ -1,6 +1,8 @@
 package com.hvly.springjp_1.com.hlvy.controller;
 
+import com.hvly.springjp_1.com.hlvy.entity.SeLPUser;
 import com.hvly.springjp_1.com.hlvy.entity.User;
+import com.hvly.springjp_1.com.hlvy.repository.SpELUserRepository;
 import com.hvly.springjp_1.com.hlvy.repository.UserAtRepository;
 import com.hvly.springjp_1.com.hlvy.repository.UserJpaRepository;
 import com.hvly.springjp_1.com.hlvy.repository.UserRepository;
@@ -33,6 +35,9 @@ public class UserController {
 
     @Autowired
     private UserJpaRepository userJpaRepository;
+
+    @Autowired
+    private SpELUserRepository spELUserRepository;
 
 
     @PersistenceContext
@@ -191,6 +196,26 @@ public class UserController {
     public List<User> findLastNameOrFirstName(Long id,String name){
 
         return  userJpaRepository.findLastNameOrFirstName(id,name);
+    }
+
+    /**
+     * 使用Spel表达式查询
+     * @return
+     */
+    @RequestMapping("findBySpelAll")
+    public List<User> findBySpelAll(){
+
+        return  userJpaRepository.findBySpelAll();
+    }
+
+    /**
+     * 使用Spel表达式公用类查询
+     * @return
+     */
+    @RequestMapping("spelfindBySpelAll")
+    public List<SeLPUser> spelfindBySpelAll(){
+
+        return  spELUserRepository.findBySpelAll();
     }
 
 
