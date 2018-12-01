@@ -218,5 +218,28 @@ public class UserController {
         return  spELUserRepository.findBySpelAll();
     }
 
+    /**
+     * @Modifying修改查询 根据id修改name
+     * @param id
+     * @param name
+     * @return
+     */
+    @RequestMapping("updateUer")
+    public String updateUer(Long id,String name){
+        int res = userJpaRepository.updateUser(id,name);
+        return res>0?"update success":"update error";
+    }
+
+    /**
+     * @Modifying删除查询 根据id删除User
+     * @param id
+     * @return
+     */
+    @RequestMapping("deleteUser")
+    public String saveUser(Long id){
+        int res = userJpaRepository.deleteUser(id);
+        return res>0?"delete success":"delete error";
+    }
+
 
 }

@@ -6,8 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -94,6 +96,25 @@ public interface UserJpaRepository extends JpaRepository<User,Long> , JpaSpecifi
      */
     @Query("select u  from  #{#entityName} u")
     List<User> findBySpelAll();
+
+    /**
+     * @Modifying修改查询 根据id修改name
+     * @param id
+     * @param name
+     * @return
+     */
+    @Transactional
+    @Modifying(clearAutomatically = true)//clearAutomatically = true刷新hibernate一级缓存
+    @Query("update User u set u.name = ?2 where u.id = ?1")
+    int updateUser(Long id,String name);
+    /**
+     * @Modifying新增查询
+     * @return
+     */
+    @Transactional
+    @Modifying(clearAutomatically = true)//clearAutomatically = true刷新hibernate一级缓存
+    @Query("delete from User u  where u.id = :id")
+    int deleteUser(@Param("id") Long id);
 
 
 }
