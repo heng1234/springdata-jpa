@@ -4,13 +4,12 @@ import com.hvly.springjp_1.com.hlvy.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 
 /**
@@ -108,13 +107,56 @@ public interface UserJpaRepository extends JpaRepository<User,Long> , JpaSpecifi
     @Query("update User u set u.name = ?2 where u.id = ?1")
     int updateUser(Long id,String name);
     /**
-     * @Modifying新增查询
+     * @Modifying删除查询
      * @return
      */
     @Transactional
     @Modifying(clearAutomatically = true)//clearAutomatically = true刷新hibernate一级缓存
     @Query("delete from User u  where u.id = :id")
     int deleteUser(@Param("id") Long id);
+
+
+    /**
+     * @QueryHints查询    ps: QueryHint仅仅了解下即可 一般业务场景基本不用
+     * @param name
+     * @param page
+     * @return
+     */
+    @QueryHints(value = {@QueryHint(name="name",value="value")},forCounting = false)
+    Page<User> findByNameOrId(String name,Long id,Pageable page);
+
+
+    /**
+     * @Procedure 的 procedureName 参数必须匹配 @NamedStoredProcedureQuery 的procedureName
+     * @Procedure 的 name参书必须匹配@NamedStoredProcedureQuery 的 name
+     * @Param必须匹配@StoredProcedureParameter的name参数
+     * 返回类型必须匹配: in_only_test 存储过程返回是void,in_and_out_test存储过程必须String
+     * */
+
+    /**
+     * 调用存储过程
+     * pluslinout 存储过程名字
+     * @param arg
+     * @return
+     */
+    @Procedure("pluslinout")
+    Integer explicitlyNamedPluslinout(Integer arg);
+    /**
+     * 调用存储过程
+     * pluslinout 存储过程名字
+     * @param arg
+     * @return
+     */
+    @Procedure(procedureName = "pluslinout")
+    Integer pluslinout(Integer arg);
+
+    /**
+     *  User.pluslIO自定义存储过程的名字
+     * @param arg
+     * @return
+     */
+    @Procedure(name = "User.plusl")
+    Integer entityAnnotatedCustomNamedProcedurePluslIO(@Param("arg") Integer arg);
 
 
 }

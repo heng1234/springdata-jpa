@@ -238,8 +238,32 @@ public class UserController {
     @RequestMapping("deleteUser")
     public String saveUser(Long id){
         int res = userJpaRepository.deleteUser(id);
-        return res>0?"delete success":"delete error";
+        return res>0?"delete success":" ， error";
     }
+
+
+
+    /**
+     * @QueryHints查询    ps: QueryHint仅仅了解下即可 一般业务场景基本不用
+     * @param name
+     * @return
+     */
+    @RequestMapping("findByNameueryHints")
+    public Page<User> findByNameueryHints(String name,Long id){
+        return userJpaRepository.findByNameOrId(name,id,new PageRequest(0,3));
+    }
+
+    /**
+     * @Procedure
+     * 调用存储过程
+     */
+    @RequestMapping("explicitlyNamedPluslinout")
+    public Integer explicitlyNamedPluslinout(int arg){
+       // return userJpaRepository.explicitlyNamedPluslinout(arg);//调用成功
+       // return userJpaRepository.pluslinout(arg);//调用成功
+        return userJpaRepository.entityAnnotatedCustomNamedProcedurePluslIO(arg);//调用成功
+    }
+
 
 
 }
