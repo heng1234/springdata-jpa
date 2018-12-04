@@ -1,7 +1,6 @@
 package com.hvly.springjp_1.com.hlvy.repository;
 
 import com.hvly.springjp_1.com.hlvy.entity.User;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
