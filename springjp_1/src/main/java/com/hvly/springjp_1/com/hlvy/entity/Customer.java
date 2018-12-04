@@ -7,7 +7,10 @@ import javax.persistence.*;
 
 /**
  * Customer
- *
+ * @NamedQuery、@Query和方法定义查询的对比
+ * 1、Spring JPA里面的优先级 @Query>@NameQuery>方法定义查询
+ * 2、推荐使用优先级: @Query>方法定义查询>@NameQuery
+ * 3、相同点是都不支持动态条件查询
  * @author heng
  **/
 
@@ -22,7 +25,7 @@ import javax.persistence.*;
         query = "select c from Customer c where c.firstname = ?1")*/
 
 /**
- * @NamedQuery 集合查询
+ * @NamedQueries 集合查询 @NamedQuery
  */
 @NamedQueries({@NamedQuery(name = "Customer.findByFirstName",
         query = "select c from Customer c where c.firstname = ?1"),
